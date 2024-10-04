@@ -1,7 +1,6 @@
 //FILE FOR PRINT TEXT IN NATIVE FORM
 
 #include "InitializeText.h"
-#include <stdio.h>
 
 TTF_Font *font = NULL;
 

@@ -2,7 +2,7 @@
 
 
 int main(){
-    Initialize(640, 480);
+    Initialize(1280, 720);
 
     return 0;
 }

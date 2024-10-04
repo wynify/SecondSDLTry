@@ -1,8 +1,9 @@
 #include "Game.h"
 #include "InitializeText.h"
+#include "SaveAndLoad.h"
 
-#define MAX_LINES 10
-#define MAX_LINE_LENGTH 256 
+#define MAX_LINES 12
+#define MAX_LINE_LENGTH 120
 #define CURSOR_BLINK_INTERVAL 500  // Cursor blink interval in milliseconds
 
 
@@ -80,13 +81,36 @@ int Initialize(int width, int height){
                         lines[line_count][0] = '\0';  // Clear the previous line
                     }
                 }
-                
                 else if (event.key.keysym.sym == SDLK_RETURN) {  // Handle Enter key for line break
                     if (line_count < MAX_LINES) {
                         strncpy(lines[line_count], text, MAX_LINE_LENGTH);
                         lines[line_count][MAX_LINE_LENGTH - 1] = '\0';  // Ensure null-termination
                         line_count++;
                         text[0] = '\0';  // Clear current input text
+                    }
+                }
+                else if (event.key.keysym.sym == SDLK_s && (SDL_GetModState() & KMOD_CTRL)){
+                    char DataToSave[MAX_LINES * MAX_LINE_LENGTH] = "";
+                    for (int i = 0; i < line_count; i++)
+                    {
+                        strncat(DataToSave, lines[i], MAX_LINE_LENGTH);
+                        strncat(DataToSave, "\n", 1);
+                    }
+                    save_to_file("main.c", DataToSave); 
+                }
+                else if (event.key.keysym.sym == SDLK_o && (SDL_GetModState() & KMOD_CTRL)){
+                    char *loaded_data = load_from_file("main.c"); 
+                    if(loaded_data != NULL){
+                        line_count = 0;
+                        text[0] = '\0'; 
+                        char *line = strtok(loaded_data, "\n");
+                        while(line != NULL && line_count < MAX_LINES){
+                            strncpy(lines[line_count], line, MAX_LINE_LENGTH);
+                            lines[line_count][MAX_LINE_LENGTH - 1] = '\0';  
+                            line_count++;
+                            line = strtok(NULL, "\n");  
+                        }
+                        free(loaded_data);
                     }
                 }
             }
