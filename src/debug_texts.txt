@@ -1,0 +1,7 @@
+//использовалось для вывода 4 строк Hello world разного цвета через циклы
+        int x = 50;
+        int y = 50;
+        for (int i = 0; i < 4; i++){
+            SDL_Color color = (i < 2) ? White : Red;
+            RenderText(renderer, "Hello world!", x, y + (i * 50), color);
+        }
